@@ -1,66 +1,44 @@
 /**
- * Set the initial values of min_value and max_value
+ * Sorts a HTML table.
+ * 
+ * @param {HTMLTableElement} table The table to sort
+ * @param {number} column The index of the column to sort
+ * @param {boolean} asc Determines if the sorting will be in ascending
  */
-function initialize() {
-  document.getElementById("min_value").value = "0";
-  document.getElementById("max_value").value = "100";
+function sortTableByColumn(table, column, asc = true) {
+  const dirModifier = asc ? 1 : -1;
+  const tBody = table.tBodies[0];
+  const rows = Array.from(tBody.querySelectorAll("tr"));
 
-  let loader = document.getElementById("loader");
-  loader.style.display = "none";
+  // Sort each row
+  const sortedRows = rows.sort((a, b) => {
+      const aColText = a.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim();
+      const bColText = b.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim();
 
-}
+      return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+  });
 
-initialize();
-
-/**
- * Handle the click event on Submit (Generate) button
- */
-document.getElementById("submit").onclick = function() {
-  submit();
-};
-
-/**
- * An async function to send the request to the backend.
- */
-async function submit() {
-  console.log("In submit!");
-
-  // Set the mouse cursor to hourglass
-  document.body.style.cursor = "wait";
-
-  // Accessing the div that has random value 
-  let random_value_element = document.getElementById("random-value");
-
-  random_value_element.innerHTML = "Please wait...";
-  
-  // Show the loader element (spinning wheels)
-  let loader = document.getElementById("loader");
-  loader.style.display = "inline-block";
-
-  try {
-    // Get the min/max values from the user 
-    let min_value = document.getElementById("min_value").value;
-    let max_value = document.getElementById("max_value").value;
-
-
-    let request = `http://127.0.0.1:5000/?min_value=${min_value}&max_value=${max_value}`;
-    console.log("request: ", request);
-
-    // Send an HTTP GET request to the backend
-    const data = await axios.get(request);
-
-    console.log("data.data: ", JSON.stringify(data.data, null, 2));
-    
-
-    // Display the random value
-    random_value_element.innerHTML = "Here is your random number: " + data.data.randomValue;
-  } catch (error) {
-    console.log("error: ", error);
+  // Remove all existing TRs from the table
+  while (tBody.firstChild) {
+      tBody.removeChild(tBody.firstChild);
   }
 
-  // Set the cursor back to default
-  document.body.style.cursor = "default";
+  // Re-add the newly sorted rows
+  tBody.append(...sortedRows);
 
-  // Hide loader animation
-  loader.style.display = "none";
+  // Remember how the column is currently sorted
+  table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+  table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-asc", asc);
+  table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("th-sort-desc", !asc);
 }
+
+document.querySelectorAll(".table-sortable th").forEach(headerCell => {
+  headerCell.addEventListener("click", () => {
+      const tableElement = headerCell.parentElement.parentElement.parentElement;
+      const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+      const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+
+      sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+  });
+});
+
