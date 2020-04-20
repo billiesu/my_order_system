@@ -1,0 +1,197 @@
+* {
+	/* background-image: url('pic01.jpg'); */
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-image: url('pic01.jpg');
+	/* color: #FFFFFF; */
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	font-size: 0.9em;
+}
+
+ul {
+	list-style: none;
+}
+
+/**
+ * top header
+ */
+.top-header {
+	align-items: center;
+	background: rgb(228, 98, 87);
+	box-shadow: 0px 2px 10px #333333;
+	display: flex;
+	height: 60px;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.avatar {
+	background: #FFFFFF;
+	border-radius: 50%;
+	color: #333C4D;
+	height: 40px;
+	margin-right: 20px;
+    margin-left: 10px;
+	padding-left: 9px;
+	padding-top: 5px;
+	width: 40px;
+}
+
+#logout-link {
+	padding-left: 10px;
+	color: white;
+}
+
+/**
+ * top navigation
+ */
+.top-nav {
+	flex: 1;
+}
+
+.top-nav a {
+	color: #F9F9F9;
+	font-weight: 400;
+	margin-left: 20px;
+	text-decoration: none;
+}
+
+#welcome-msg {
+	border-right: 1px solid #FFFFFF;
+	padding-right: 10px;
+}
+
+/**
+ * main container
+ */
+.container {
+	margin: 60px auto;
+	max-width: 1400px;
+	min-width: 600px;
+}
+
+/**
+ * main header
+ */
+.container>header {
+	align-items: center;
+	/* background:
+		url('http://folkartcarsi.com/img/4.jpg')
+		no-repeat 50% 40%; */
+	background-size: 100%;
+	display: flex;
+	height: 250px;
+}
+
+.container>header p {
+	color: white;
+	border-left: 1px solid #FFFFFF;
+	font-weight: 400;
+	font-size: 2em;
+	line-height: 1em;
+	margin-left: 220px;
+	padding-left: 5px;
+}
+
+.container>header span {
+	color: #FBAF41;
+}
+
+
+/**
+ * main section
+ */
+.main-section {
+    /* background: #F3BB43; */
+    background:rgb(233, 194, 139);
+    height: 420px;
+}
+
+/**
+ * aside
+ */
+#item-nav {
+	float: left;
+	width: 220px;
+}
+
+.nav-icon {
+	color: #624630;
+	padding: 20px;
+	text-align: center;
+}
+
+/**
+ * main navigation
+ */
+.main-nav-btn {
+	background: none;
+	border-top: 1px solid #FFFFFF;
+	color: #FFFFFF;
+	display: block;
+	padding: 20px;
+	text-align: left;
+	text-decoration: none;
+}
+
+.main-nav-btn:hover {
+	background: rgba(255, 255, 255, 0.8);
+	color: #624630;
+}
+
+.main-nav-btn.active {
+	background: #F2EBD9;
+	color: #624630;
+}
+
+.main-nav-btn i {
+	width: 20px;
+}
+/**
+* order list
+*/
+#order-list {
+    margin-left: 220px;
+	/* min-height: 350px; */
+    padding: 0px;
+    overflow: scroll;
+    height:360px;
+}
+
+/**
+ * footer section
+ */
+footer {
+	/* background: #434343; */
+	color: white;
+	font-size: 0.8em;
+	height: 200px;
+    position: relative;
+    
+}
+
+footer p {
+	text-align: center;
+}
+
+footer p.title {
+	font-size: 1.2em;
+	padding: 15px;
+}
+
+footer ul {
+	align-items: center;
+	display: flex;
+	padding: 20px;
+}
+
+footer ul li {
+	flex: 1;
+}

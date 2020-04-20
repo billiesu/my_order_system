@@ -1,50 +1,137 @@
 <!DOCTYPE html>
+<html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Order Summary">
+  <meta name="author" content="Mingang Xu & Binglin Su">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
   <title>Order Summary</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta charset="utf-8" />
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./table_style.css">
 </head>
-
 <body>
-  <table class="table table-sortable">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Occupation</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Dom</td>
-        <td>35</td>
-        <td>Web Developer</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Rebecca</td>
-        <td>29</td>
-        <td>Teacher</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>John</td>
-        <td>30</td>
-        <td>Civil Engineer</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>Andre</td>
-        <td>20</td>
-        <td>Dentist</td>
-      </tr>
-    </tbody>
-  </table>
+  <header class="top-header">
+    <nav class="top-nav">
+      <a href="#">Home</a>
+      <a href="#">Contact</a>
+      <a href="#">About</a>
+    </nav>
+    <span id="welcome-msg"></span>
+    <i id="avatar" class="avatar fa fa-user fa-2x"></i>
+  </header>
+  
+  <div class="container">
+    <header>
+      <p>
+        <span>Order</span>
+        <br /> Summary
+      </p>
+    </header>
 
+    <section class="main-section">
+
+      <aside id="item-nav">
+        <div class="nav-icon">
+          <i class="fa fa-sitemap fa-2x"></i>
+        </div>
+        <nav class="main-nav">
+          <a href="#" id="nearby-btn" class="main-nav-btn active">
+            <i class="fa fa-folder-o"></i> Orders
+          </a>
+          <a href="#" id="fav-btn" class="main-nav-btn">
+            <i class="fa fa-folder-open"></i> Order Details
+          </a>
+          <a href="#" id="recommend-btn" class="main-nav-btn">
+            <i class="fa fa-user"></i> Clients
+          </a>
+        </nav>
+      </aside>
+      <div id="order-list">
+      <table class="table table-sortable" >
+        <thead class = "table-header">
+          <tr>
+            <th>Order Number</th>
+            <th>Order Date</th>
+            <th>Client</th>
+            <th>Total Price</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Dom</td>
+            <td>35</td>
+            <td>Web Developer</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Rebecca</td>
+            <td>29</td>
+            <td>Teacher</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>John</td>
+            <td>30</td>
+            <td>Civil Engineer</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Andre</td>
+            <td>20</td>
+            <td>Dentist</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Andre</td>
+            <td>20</td>
+            <td>Dentist</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Andre</td>
+            <td>20</td>
+            <td>Dentist</td>
+            <td>Web Developer</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Andre</td>
+            <td>20</td>
+            <td>Dentist</td>
+            <td>Web Developer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div> 
+    </section>
+  </div>
+  
+  <footer>
+    <p class="title">What We Do</p>
+    <p>"Help you handle your orders easier."</p>
+    <ul>
+      <li>
+        <p><i class="fa fa-map-o fa-2x"></i></p>
+        <p>Our office, CA</p>
+      </li>
+      <li>
+        <p><i class="fa fa-envelope-o fa-2x"></i></p>
+        <p>xmgbg18@gmail.com</p>
+      </li>
+      <li>
+        <p><i class="fa fa-phone fa-2x"></i></p>
+        <p>+1 213 618 9608</p>
+      </li>
+    </ul>
+  </footer>
   <script src="./script.js"></script>
 </body>
-
+</html>
