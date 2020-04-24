@@ -111,7 +111,8 @@ ul {
 .main-section {
     /* background: #F3BB43; */
     background:rgb(233, 194, 139);
-    height: 420px;
+	height: 420px;
+	position: relative;
 }
 
 /**
@@ -155,16 +156,115 @@ ul {
 	width: 20px;
 }
 /**
-* order list
+* detail part
 */
-#order-list {
-    margin-left: 220px;
+.detail-info {
+
+	height: 420px;
+	margin-left: 220px;
+	background: #F2EBD9;
+}
+
+.info-list {
 	/* min-height: 350px; */
     padding: 0px;
     overflow: scroll;
     height:360px;
 }
 
+.add-btn {
+	/* border-top: 0.1px solid white; */
+	height: 60px;
+	display: flex;
+}
+.add-btn>button {
+	font-size: medium;
+	color: rgb(9, 46, 9);
+	flex: 1
+}
+.add-btn>button:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.8);
+	color: #624630;
+}
+
+.add-btn>button:active {
+	cursor: auto;
+	background: #F2EBD9;
+	color: #624630;
+}
+
+/**
+* add/edit functions
+*/
+.detail-header {
+	background-color: #CCE8EB;
+	padding: 20px;
+	text-align: center;
+	color:gray;
+}
+
+
+.pop-out {
+	background: white;
+	min-height:600px;
+	width: 600px;
+	position: relative;
+	top: -520px;
+	left:470px;
+	display: none;	
+}
+#new-orders, #new-products, #new-clients {
+	display: none;
+}
+.pop-out ul{
+	align-content: center;
+	margin-left:100px;
+	/* margin-right:130px; */
+	width: 400px;
+	border-left: 1px solid	skyblue;
+	border-right: 1px solid skyblue;
+}
+.pop-out li{
+	padding:5px;
+	margin:20px;
+	height: 100%;
+}
+.pop-out p{
+	color:gray;
+	background-color: #CCE8EB;
+	float: left;
+	width:80px;
+	margin-left: 50px;
+	text-align: left;
+}
+.pop-out p::after{
+	content: ":";
+}
+	
+.pop-out input{
+	margin-left:20px;
+}
+.save-cancel {
+	text-align: center;
+	margin-left:80px;
+	width: 400px;
+	margin-top:80px;
+}
+.notation {
+	text-align: center;
+	margin-top:80px;
+}
+.save-cancel button {
+	margin-left: 20px;
+	height:30px;
+	width: 80px;
+	background-color: #CCE8EB;
+	color:gray;
+}
+.save-cancel button:hover {
+	cursor: pointer;
+}
 /**
  * footer section
  */
@@ -179,6 +279,7 @@ footer {
 
 footer p {
 	text-align: center;
+	position: relative;
 }
 
 footer p.title {
