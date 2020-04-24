@@ -5,6 +5,9 @@ let express = require("express");
 let app = express();
 app.use(express.json());     
 app.use(express.urlencoded());
+app.use(express.static("./frontend/public"));
+// app.use(cors());
+
 
 let bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
@@ -98,16 +101,20 @@ async function dbAndMsg (query, body) {
   }
   return dbMsg;
 }
+// 主页
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/frontend/public/index.html");
+});
 
 
-// login,发送主页
-app.post('/login', (req, res) => {
+// login,发送login主页
+app.get('/Login', (req, res) => {
   console.log(req.query);
-  res.redirect('/home');  //跳转到home界面
+  res.sendFile(__dirname + "/frontend/public/order_summary.html");  //跳转到home界面
 });
 
 // load 登陆后发送所有的订单和用户信息
-app.post('/load', async function (req, res) {
+app.get('/load', async function (req, res) {
   let allMsg = {
     orders: await Order.find(),
     clients: await Client.find(),
