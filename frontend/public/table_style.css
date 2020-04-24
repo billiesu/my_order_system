@@ -29,6 +29,9 @@
   .table-sortable th {
     cursor: pointer;
   }
+  .order-number:hover {
+    cursor: pointer;
+  }
   
   .table-sortable .th-sort-asc::after {
     content: "\25b4";
