@@ -61,7 +61,7 @@
               href="#"
               id="products-btn"
               class="main-nav-btn"
-              onclick="openPage()"
+             onclick="openPage()"
             >
               <i class="fa fa-folder-open"></i> Products
             </a>
@@ -105,12 +105,11 @@
             <table class="table table-sortable">
               <thead class="table-header">
                 <tr>
-                  <th>Order Number</th>
-                  <th>Order Date</th>
-                  <th>Client</th>
-                  <th>Total Price</th>
-                  <th>Pay Type</th>
-                  <th>Status</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Quantities</th>
+                  <th>Price</th>
                   <th>Remark</th>
                 </tr>
               </thead>
@@ -129,12 +128,12 @@
             <table class="table table-sortable">
               <thead class="table-header">
                 <tr>
-                  <th>Order Number</th>
-                  <th>Order Date</th>
-                  <th>Client</th>
-                  <th>Total Price</th>
-                  <th>Pay Type</th>
-                  <th>Status</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>State</th>
+                  <th>Country</th>
+                  <th>Phone</th>
                   <th>Remark</th>
                 </tr>
               </thead>
@@ -223,7 +222,7 @@
             <div class="detail-header">Order Detail</div>
             <ul>
               <li>
-                <p>Order Date</p>
+                <p>Name</p>
                 <input
                   type="none"
                   name="order_date"
@@ -232,7 +231,7 @@
                 />
               </li>
               <li>
-                <p>Client</p>
+                <p>Type</p>
                 <input
                   type="number"
                   name="client"
@@ -241,7 +240,7 @@
                 />
               </li>
               <li>
-                <p>Total price</p>
+                <p>Quantities</p>
                 <input
                   type="number"
                   name="total price"
@@ -250,20 +249,11 @@
                 />
               </li>
               <li>
-                <p>Status</p>
+                <p>Price</p>
                 <input
                   type="number"
                   name="status"
                   id="status"
-                  placeholder="please enter"
-                />
-              </li>
-              <li>
-                <p>Pay Type</p>
-                <input
-                  type="number"
-                  name="pay_type"
-                  id="pay_type"
                   placeholder="please enter"
                 />
               </li>
@@ -293,16 +283,7 @@
             <div class="detail-header">Client Detail</div>
             <ul>
               <li>
-                <p>Order Date</p>
-                <input
-                  type="none"
-                  name="order_date"
-                  id="order_date"
-                  placeholder="please enter"
-                />
-              </li>
-              <li>
-                <p>Client</p>
+                <p>Name</p>
                 <input
                   type="number"
                   name="client"
@@ -311,7 +292,7 @@
                 />
               </li>
               <li>
-                <p>Total price</p>
+                <p>Address</p>
                 <input
                   type="number"
                   name="total price"
@@ -320,7 +301,7 @@
                 />
               </li>
               <li>
-                <p>Status</p>
+                <p>State</p>
                 <input
                   type="number"
                   name="status"
@@ -329,7 +310,16 @@
                 />
               </li>
               <li>
-                <p>Pay Type</p>
+                <p>Country</p>
+                <input
+                  type="number"
+                  name="pay_type"
+                  id="pay_type"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Phone</p>
                 <input
                   type="number"
                   name="pay_type"
