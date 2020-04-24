@@ -6,11 +6,11 @@
 let data = {};
 let currID;
 let currElement;
-let info;
+// let info;
 const urlPrefix = 'http://127.0.0.1:5000';
 onload = async function () {
-  // const res = await axios.get(urlPrefix + "/load");
-  // data = res.data;
+  const res = await axios.get(urlPrefix + "/load");
+  data = res.data;
   generateTable("order-table", "orders");
   generateTable("product-table", "products");
   generateTable("client-table", "clients");
@@ -22,65 +22,65 @@ onload = async function () {
  */
 function generateTable(tableID, type) {
   let tbody = document.getElementById(tableID);
-  info = {
-    "001":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "002" : {
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "003":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "004":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "005":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "006":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-    "007":{
-      "Order Date": "张珊",
-      Client: "学生",
-      "Total price": "Web Developer",
-      Status: "Web Developer",
-      "Pay Type": "Web Developer",
-      Remark: "Web Developer",
-    },
-  };
-  // let info = data[type];
+  // let info = {
+  //   "001":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "002" : {
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "003":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "004":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "005":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "006":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  //   "007":{
+  //     "Order Date": "张珊",
+  //     Client: "学生",
+  //     "Total price": "Web Developer",
+  //     Status: "Web Developer",
+  //     "Pay Type": "Web Developer",
+  //     Remark: "Web Developer",
+  //   },
+  // };
+  let info = data[type];
   for (let key in info) {
     let tr = generateRow(key, info[key]);
     tbody.appendChild(tr);
@@ -181,23 +181,19 @@ async function save() {
   notation.innerHTML = "Saving...";
   //Generate a random orderID
   let id;
-  data[type] = info;
+  // data[type] = info;
   if (
     document.getElementsByClassName("pop-out")[0].classList.contains("adding")
   ) {
-    if (parent.id === "new-orders") {
-      id = randomNumber();
-      data[type][id] = {};
-    }
-    request = urlPrefix + 'add?type=' + type;
+    id = randomNumber();
+    data[type][id] = {};
+    request = urlPrefix + 'add?type=' + type + '&id=' + id;
     document
       .getElementsByClassName("pop-out")[0]
       .classList.toggle("adding", false);
   } else {
-    if (parent.id === "new-orders") {
-      id = currID;
-    }
-    resquest = urlPrefix + `/edit?type=` + type;
+    id = currID;
+    resquest = urlPrefix + `/edit?type=` + type + '&id=' + id;
   }
   //Get all the input value.
   parent.querySelectorAll("li").forEach((element) => {
@@ -217,6 +213,7 @@ async function save() {
       arr.push(data[type][id][key]);
     }
     let i = 0;
+    console.log(data[type][id]);
     currElement.parentElement.parentElement.querySelectorAll('td').forEach((element) => {
       element.innerHTML = arr[i++];
     });
@@ -236,6 +233,7 @@ async function save() {
 }
 //generate a random order ID
 function randomNumber() {
+  
   const now = new Date();
   let month = now.getMonth() + 1;
   let day = now.getDate();
@@ -273,8 +271,8 @@ function del() {
     //send delete request to backend
     let parent = event.target.parentElement.parentElement;
     let type = parent.id.substring(4);
-    let request = urlPrefix + '/delete?type=' + type;
-    axios.post(request, {id:currID}, (err) => {
+    let request = urlPrefix + '/delete?type=' + type + '&id=' + currID;
+    axios.get(request, (err) => {
       if (err) {
         console.log(err);
       }else {
