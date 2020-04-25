@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Order Summary" />
+    <meta name="author" content="Mingang Xu & Binglin Su" />
+    <!-- Load external sources -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Order Summary</title>
+
+    <!-- Load our selves' css/js files -->
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./table_style.css" />
+    <script src="./script.js"></script>
+  </head>
+  <body>
+    <header class="top-header">
+      <nav class="top-nav">
+        <a href="#">Home</a>
+        <a href="#">Contact</a>
+        <a href="#">About</a>
+      </nav>
+      <span id="welcome-msg"></span>
+      <i id="avatar" class="avatar fa fa-user fa-2x"></i>
+    </header>
+
+    <div class="container">
+      <header>
+        <p>
+          <span>Order</span>
+          <br />
+          Summary
+        </p>
+      </header>
+
+      <section class="main-section">
+        <aside id="item-nav">
+          <div class="nav-icon">
+            <i class="fa fa-sitemap fa-2x"></i>
+          </div>
+          <nav class="main-nav">
+            <a
+              href="#"
+              id="orders-btn"
+              class="main-nav-btn active"
+              onclick="openPage()"
+            >
+              <i class="fa fa-folder-o"></i> Orders
+            </a>
+            <a
+              href="#"
+              id="products-btn"
+              class="main-nav-btn"
+             onclick="openPage()"
+            >
+              <i class="fa fa-folder-open"></i> Products
+            </a>
+            <a
+              href="#"
+              id="clients-btn"
+              class="main-nav-btn"
+              onclick="openPage()"
+            >
+              <i class="fa fa-user"></i> Clients
+            </a>
+          </nav>
+        </aside>
+        <!-- order list -->
+        <div class="detail-info" id="orders">
+          <div class="info-list">
+            <table class="table table-sortable">
+              <thead class="table-header">
+                <tr>
+                  <th>Order Number</th>
+                  <th>Order Date</th>
+                  <th>Client</th>
+                  <th>Total Price</th>
+                  <th>Pay Type</th>
+                  <th>Status</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody id="order-table"></tbody>
+            </table>
+          </div>
+          <div class="add-btn">
+            <button class="add-new-btn" type="button" onclick="add()">
+              New Order
+            </button>
+          </div>
+        </div>
+        <!-- product list -->
+        <div class="detail-info" id="products" style="display: none;">
+          <div class="info-list">
+            <table class="table table-sortable">
+              <thead class="table-header">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Quantities</th>
+                  <th>Price</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody id="product-table"></tbody>
+            </table>
+          </div>
+          <div class="add-btn">
+            <button class="add-new-btn" type="button" onclick="add()">
+              New Product
+            </button>
+          </div>
+        </div>
+        <!-- client list -->
+        <div class="detail-info" id="clients" style="display: none;">
+          <div class="info-list">
+            <table class="table table-sortable">
+              <thead class="table-header">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>State</th>
+                  <th>Country</th>
+                  <th>Phone</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody id="client-table"></tbody>
+            </table>
+          </div>
+          <div class="add-btn">
+            <button class="add-new-btn" type="button" onclick="add()">
+              New Client
+            </button>
+          </div>
+        </div>
+        <!-- The editing and adding part of the orders/products/clients -->
+        <div class="pop-out">
+          <!-- The editing and adding part of the orders -->
+          <div id="new-orders">
+            <div class="detail-header">Order Detail</div>
+            <ul>
+              <li>
+                <p>OrderDate</p>
+                <input
+                  type="number"
+                  name="order_date"
+                  id="order_date"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Client</p>
+                <input
+                  type="none"
+                  name="client"
+                  id="client"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Totalprice</p>
+                <input
+                  type="number"
+                  name="total price"
+                  id="total price"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Status</p>
+                <input
+                  type="none"
+                  name="status"
+                  id="status"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>PayType</p>
+                <input
+                  type="none"
+                  name="pay_type"
+                  id="pay_type"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Remark</p>
+                <input
+                  type="none"
+                  name="remark"
+                  id="remark"
+                  placeholder="please enter"
+                />
+              </li>
+            </ul>
+            <div class="save-cancel">
+              <button class="save" type="button" onclick="save()">Save</button>
+              <button class="delete" type="button" onclick="del()">
+                Delete
+              </button>
+              <button class="cancel" type="button" onclick="cancel()">
+                Cancel
+              </button>
+            </div>
+            <div class="notation" id="order-notation"></div>
+          </div>
+          <div id="new-products">
+            <div class="detail-header">Order Detail</div>
+            <ul>
+              <li>
+                <p>Name</p>
+                <input
+                  type="none"
+                  name="order_date"
+                  id="order_date"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Type</p>
+                <input
+                  type="number"
+                  name="client"
+                  id="client"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Quantities</p>
+                <input
+                  type="number"
+                  name="total price"
+                  id="total price"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Price</p>
+                <input
+                  type="number"
+                  name="status"
+                  id="status"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Remark</p>
+                <input
+                  type="none"
+                  name="remark"
+                  id="remark"
+                  placeholder="please enter"
+                />
+              </li>
+            </ul>
+            <div class="save-cancel">
+              <button class="save" type="button" onclick="save()">Save</button>
+              <button class="delete" type="button" onclick="del()">
+                Delete
+              </button>
+              <button class="cancel" type="button" onclick="cancel()">
+                Cancel
+              </button>
+            </div>
+            <div class="notation" id="product-notation"></div>
+          </div>
+
+          <div id="new-clients">
+            <div class="detail-header">Client Detail</div>
+            <ul>
+              <li>
+                <p>Name</p>
+                <input
+                  type="number"
+                  name="client"
+                  id="client"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Address</p>
+                <input
+                  type="number"
+                  name="total price"
+                  id="total price"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>State</p>
+                <input
+                  type="number"
+                  name="status"
+                  id="status"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Country</p>
+                <input
+                  type="number"
+                  name="pay_type"
+                  id="pay_type"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Phone</p>
+                <input
+                  type="number"
+                  name="pay_type"
+                  id="pay_type"
+                  placeholder="please enter"
+                />
+              </li>
+              <li>
+                <p>Remark</p>
+                <input
+                  type="none"
+                  name="remark"
+                  id="remark"
+                  placeholder="please enter"
+                />
+              </li>
+            </ul>
+            <div class="save-cancel">
+              <button class="save" type="button" onclick="save()">Save</button>
+              <button class="delete" type="button" onclick="del()">
+                Delete
+              </button>
+              <button class="cancel" type="button" onclick="cancel()">
+                Cancel
+              </button>
+            </div>
+            <div class="notation" id="client-notation"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p class="title">What We Do</p>
+      <p>"Help you handle your orders easier."</p>
+      <ul>
+        <li>
+          <p><i class="fa fa-map-o fa-2x"></i></p>
+          <p>Our office, CA</p>
+        </li>
+        <li>
+          <p><i class="fa fa-envelope-o fa-2x"></i></p>
+          <p>xmgbg18@gmail.com</p>
+        </li>
+        <li>
+          <p><i class="fa fa-phone fa-2x"></i></p>
+          <p>+1 213 618 9608</p>
+        </li>
+      </ul>
+    </footer>
+    <script src="./table-sort.js"></script>
+  </body>
+</html>
