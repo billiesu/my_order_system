@@ -187,7 +187,11 @@ async function save() {
   ) {
     id = randomNumber();
     data[type][id] = {};
+<<<<<<< HEAD:backend/frontend/public/script.js
     request = urlPrefix + '/add?type=' + type + '&id=' + id;
+=======
+    request = urlPrefix + 'add?type=' + type + '&id=' + id;
+>>>>>>> master:frontend/public/script.js
     document
       .getElementsByClassName("pop-out")[0]
       .classList.toggle("adding", false);
@@ -280,8 +284,11 @@ function del() {
     let parent = event.target.parentElement.parentElement;
     let type = parent.id.substring(4);
     let request = urlPrefix + '/delete?type=' + type + '&id=' + currID;
+<<<<<<< HEAD:backend/frontend/public/script.js
     //打印
     console.log(request);
+=======
+>>>>>>> master:frontend/public/script.js
     axios.get(request, (err) => {
       if (err) {
         console.log(err);
