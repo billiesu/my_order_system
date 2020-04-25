@@ -24,6 +24,8 @@ onload = async function () {
         id = res.data[type][key];
         data[type][id] = {};
       }else {
+        console.log(key);
+        console.log(data[type][id]);
         data[type][id][key] = res.data[type][key];
       }
     }
