@@ -7,7 +7,7 @@ let data = {};
 let currID;
 let currElement;
 // let info;
-const urlPrefix = 'http://127.0.0.1:5000';
+const urlPrefix = 'http://www.tntrpg.com:5000';
 
 //Load the infos from the backend.
 onload = async function () {

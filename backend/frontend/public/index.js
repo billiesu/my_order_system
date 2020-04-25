@@ -13,7 +13,7 @@ async function submit() {
         let password = document.getElementById("password").value;
   
         // Address of my backend
-        let request = `http://127.0.0.1:5000/login`;
+        let request = `http://www.tntrpg.com:5000/login`;
   
         // Send an HTTP GET request to the backend
         // let login_info = {"username" : username, "password" : password};
