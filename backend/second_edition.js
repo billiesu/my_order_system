@@ -1,6 +1,6 @@
 "use strict";
 
-// 引入expres框架
+// import express frame
 let express = require("express");
 let app = express();
 const cors = require("cors");
@@ -16,18 +16,18 @@ let jsonParser = bodyParser.json();
 
 let port = 5000;
 
-//引入数据库模块
+//import database Model
 const mongoose = require('mongoose');
 // need to be set for use findOneAndUpdate function
 mongoose.set('useFindAndModify', false);
-// 数据库绑定
+// connect database
 let url = 'mongodb://localhost:27017/orderManage';
 mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("Connected to Database");
   }).catch((err) => {
       console.log("Not Connected to Database ERROR! ", err);
   });
-// 定义order模型
+// define order Model
 const orderSchema = new mongoose.Schema({ 
   Id: {type: String, unique:true},
   OrderDate: {type:String},   //不需要设定
@@ -37,7 +37,7 @@ const orderSchema = new mongoose.Schema({
   Status: {type:String},
   Remark: {type:String}
 });
-//定义client模型
+//define client Model
 const clientSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
   Name: {type:String},
@@ -48,7 +48,7 @@ const clientSchema = new mongoose.Schema({
   Remark: {type:String}
 })
 
-//定义product模型
+// define product model
 const productSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
   Name: {type:String},
@@ -57,11 +57,12 @@ const productSchema = new mongoose.Schema({
   Price: {type:String},
   Remark: {type:String}
 })
-// 以固定模式作为Order数据库的模版
+// create collection entrance for the specific Model
 const Order = mongoose.model('Order', orderSchema);
 const Client = mongoose.model('Client', clientSchema);
 const Product = mongoose.model("Product", productSchema);
 
+// define db'type & db's msg with req.query & req.body
 async function dbAndMsg (query, body) {
   let db;
   let msg;
@@ -105,18 +106,19 @@ async function dbAndMsg (query, body) {
   return dbMsg;
 }
 
-
+// main page
 app.get("/", function (req, res) {
   console.log("req.query");
   res.sendFile(__dirname + "/frontend/public/index.html");
 });
 
+// loading page
 app.route("/Login").get((req, res) =>{
   res.sendFile(__dirname + "/frontend/public/order_summary.html");
 
 });
 
-// load 登陆后发送所有的订单和用户信息
+// after loading, send all client/order/product msg back 
 app.get('/load',  async function (req, res){
   let allMsg = {
     orders: await Order.find(),
@@ -129,7 +131,7 @@ app.get('/load',  async function (req, res){
   res.send(content);
 })
 
-// 增加 new order || new client || new product
+// add new order/lient/roduct
 app.post('/add', jsonParser, async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
   console.log("body contains:", req.body);
@@ -147,7 +149,7 @@ app.listen(port, err => {
   console.log(`Listening on port: ${port}`);
 });
 
-// update Order || client ||  product 
+// update order/lient/roduct
 app.post('/edit', jsonParser, async function (req, res) {
   console.log("req.body",req.body,"req.query",req.query);
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
@@ -162,7 +164,7 @@ app.post('/edit', jsonParser, async function (req, res) {
   }
 })
 
-//delete order || client || product
+//delete order/lient/roduct
 app.get('/delete', async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
   let db;
@@ -181,7 +183,7 @@ app.get('/delete', async function (req, res) {
   
 })
 
-//delete function
+//delete function(availablefor all db type)
 async function deleteFunction (db, _id) { 
   db.findByIdAndDelete(_id, function(err) {
     if (err) {
@@ -192,7 +194,7 @@ async function deleteFunction (db, _id) {
   })
 }
 
-// sync function
+// insert function (availablefor all db type)
 async function insertFunction (db, msg) {
   // const res = await Order.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
   let sign = await findFunction(db, msg);
@@ -206,7 +208,7 @@ async function insertFunction (db, msg) {
   }
 }
 
-// update the original msg 
+// update the original msg (availablefor all db type)
 async function updateFunction (db, id, newMsg) {
   // 跟新order内容
     db.findByIdAndUpdate(
@@ -226,7 +228,7 @@ async function updateFunction (db, id, newMsg) {
 }
 
 
-// using ID search order
+// using Id (not _id) search msg(return one msg cz only Id is unique)
 async function findFunction (db, msg) {
   const res = await db.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
   if (res[0] != null) {
