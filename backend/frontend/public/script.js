@@ -14,19 +14,29 @@ onload = async function () {
   const res = await axios.get(urlPrefix + "/load");
   //Preprcess the data we received.
   for (let type in res.data) {
+    console.log("type:",type);
     data[type] = {};
     let id;
-    for (let key in res.data[type]) {
-      if (key === "_id" || key === "_v") {
-        continue;
-      }
-      if (key === "Id") {
-        id = res.data[type][key];
-        data[type][id] = {};
-      }else {
-        data[type][id][key] = res.data[type][key];
+    
+    for (let layer in res.data[type]) {
+      console.log("res,type:",res.data[type][layer]);
+      for (let key in res.data[type][layer]) {
+        console.log("Key:", key);
+        if (key === "_id" || key === "__v") {
+          continue;
+        }
+        if (key === "Id") {
+          id = res.data[type][layer][key];
+          
+          console.log("type",type);
+          data[type][id] = {};
+        }else {
+          data[type][id][key] = {};
+          data[type][id][key] = res.data[type][layer][key];
+        }
       }
     }
+  
   }
   generateTable("order-table", "orders");
   generateTable("product-table", "products");
@@ -184,6 +194,7 @@ document.getElementsByClassName("save").onclick = function () {
 };
 async function save() {
   let parent = event.target.parentElement.parentElement;
+  console.log("parent:", parent)
   let type = parent.id.substring(4);
   if (data[type] === undefined) {
     data[type] = {};
@@ -209,7 +220,8 @@ async function save() {
       .classList.toggle("adding", false);
   } else {
     id = currID;
-    resquest = urlPrefix + `/edit?type=` + type + '&id=' + id;
+    request = urlPrefix + `/edit?type=` + type + '&id=' + id;
+    console.log("request:", request);
   }
   //打印
   console.log(request);
@@ -219,6 +231,7 @@ async function save() {
     data[type][id][element.querySelector("p").innerHTML] = element.querySelector(
       "input"
     ).value;
+    console.log(element.querySelector("input").value);
   });
   //Insert the input infos into the corresponding table.
   let tableID = parent.id.substring(4, parent.id.length - 1) + "-table";
@@ -245,15 +258,17 @@ async function save() {
   await axios.post(request, send, (err) => {
     if (err) {
       console.log(err);
-    } else {
-      notation.innerHTML = "";
-      document.body.style.cursor = "none";
-      console.log("data type:", data[type]);
     }
   });
-  //Hide the edit pages
+  // cancel notation
+  notation.innerHTML = "";
+  document.body.style.cursor = "default";
+  console.log("data type:", data[type]);
+  //Hide the edit pages  parent = event.target.parentElement.parentElement;
   document.getElementsByClassName("pop-out")[0].style.display = "none";
-  event.target.parentElement.parentElement.style.display = "none";
+  console.log("evernt:", parent);
+  parent.style.display = "none";
+  
 }
 //generate a random order ID
 function randomNumber() {
@@ -294,6 +309,7 @@ function del() {
 
     //send delete request to backend
     let parent = event.target.parentElement.parentElement;
+    console.log("parent:", parent)
     let type = parent.id.substring(4);
     let request = urlPrefix + '/delete?type=' + type + '&id=' + currID;
     //打印
@@ -301,11 +317,10 @@ function del() {
     axios.get(request, (err) => {
       if (err) {
         console.log(err);
-      }else {
-        document.getElementsByClassName("pop-out")[0].style.display = "none";
-        event.target.parentElement.parentElement.style.display = "none";
       }
     });
+    document.getElementsByClassName("pop-out")[0].style.display = "none";
+    event.target.parentElement.parentElement.style.display = "none";
   }
 }
 
