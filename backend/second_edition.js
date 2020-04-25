@@ -124,6 +124,7 @@ app.get('/load',  async function (req, res){
     products: await Product.find()
   }
   console.log("req.query",allMsg);
+  console.log("success load!!!");
   let content = JSON.stringify(allMsg);
   res.send(content);
 })
@@ -147,8 +148,10 @@ app.listen(port, err => {
 });
 
 // update Order || client ||  product 
-app.post('/update', jsonParser, async function (req, res) {
+app.post('/edit', jsonParser, async function (req, res) {
+  console.log("req.body",req.body,"req.query",req.query);
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
+  
   let dbMsg = await dbAndMsg(req.query, req.body);
   let searchRes = await findFunction(dbMsg.dbName, dbMsg.msgContend);
   if (!searchRes.res) {
@@ -216,7 +219,7 @@ async function updateFunction (db, id, newMsg) {
         }
         if (res) {
           console.log("success to update msg!!!")
-          console.log(res);
+          // console.log(res);
         }
       })  
   
