@@ -30,32 +30,32 @@ mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreat
 // 定义order模型
 const orderSchema = new mongoose.Schema({ 
   Id: {type: String, unique:true},
-  orderTime: {type:String},   //不需要设定
-  orderStatus: {type:String},
-  payType: {type:String},
-  customerName: {type:String},
-  totalPrice: {type:String},
-  remark: {type:String}
+  OrderDate: {type:String},   //不需要设定
+  Client: {type:String},
+  Totalprice: {type:String},
+  PayType: {type:String},
+  Status: {type:String},
+  Remark: {type:String}
 });
 //定义client模型
 const clientSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
-  customerName: {type:String},
-  address: {type:String},
-  status: {type:String},
-  phoneNumber: {type:String},
-  remark: {type:String},
-  country: {type:String}
+  Name: {type:String},
+  Address: {type:String},
+  State: {type:String},
+  Country: {type:String},
+  Phone: {type:String},
+  Remark: {type:String}
 })
 
 //定义product模型
 const productSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
-  productName: {type:String},
-  price: {type:String},
-  quantity:{type:String},
-  type: {type:String},
-  remark: {type:String}
+  Name: {type:String},
+  Type: {type:String},
+  Quantities:{type:String},
+  Price: {type:String},
+  Remark: {type:String}
 })
 // 以固定模式作为Order数据库的模版
 const Order = mongoose.model('Order', orderSchema);
@@ -69,33 +69,33 @@ async function dbAndMsg (query, body) {
     db = Order;
     msg = {
       Id : query.id,
-      orderTime: body.data.OrderDate,
-      orderStatus: body.data.OrderDate,
-      payType: body.data.PayType,
-      customerName: body.data.Client,
-      totalPrice: body.data.Totalprice,
-      remark: body.data.Remark
+      OrderDate: body.data.OrderDate,
+      Client: body.data.Client,
+      Totalprice: body.data.Totalprice,
+      PayType: body.data.PayType,
+      Status: body.data.Status,
+      Remark: body.data.Remark
     } 
   }else if (query.type == "clients") {
     db = Client;
     msg = {
       Id: query.id,
-      customerName: body.data.Name,
-      address: body.data.Address,
-      status: body.data.Status,
-      phoneNumber: body.data.Phone,
-      remark: body.data.Remark,
-      country: body.data.Country
+      Name: body.data.Name,
+      Address: body.data.Address,
+      State: body.data.State,
+      Country: body.data.Country,
+      Phone: body.data.Phone,
+      Remark: body.data.Remark
     }
   }else if (query.type == "products") {
     db = Product,
     msg = {
       Id: query.id,
-      productName: body.data.Name,
-      price: body.data.Price,
-      quantity: body.data.Quantities,
-      type: body.data.Type,
-      remark: body.data.Remark     
+      Name: body.data.Name,
+      Type: body.data.Type,
+      Quantities: body.data.Quantities,
+      Price: body.data.Price,
+      Remark: body.data.Remark     
     }
   }
   let dbMsg = {

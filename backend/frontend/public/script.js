@@ -8,9 +8,26 @@ let currID;
 let currElement;
 // let info;
 const urlPrefix = 'http://127.0.0.1:5000';
+
+//Load the infos from the backend.
 onload = async function () {
   const res = await axios.get(urlPrefix + "/load");
-  data = res.data;
+  //Preprcess the data we received.
+  for (let type in res.data) {
+    data[type] = {};
+    let id;
+    for (let key in res.data[type]) {
+      if (key === "_id" || key === "_v") {
+        continue;
+      }
+      if (key === "Id") {
+        id = res.data[type][key];
+        data[type][id] = {};
+      }else {
+        data[type][id][key] = res.data[type][key];
+      }
+    }
+  }
   generateTable("order-table", "orders");
   generateTable("product-table", "products");
   generateTable("client-table", "clients");
@@ -90,10 +107,9 @@ function generateRow(id, row_info) {
   let row = document.createElement("tr");
   //If it is a order number, make it clickable
   let cell = document.createElement("td");
-  row.appendChild(cell);
-
   cell.innerHTML =
         "<p onclick='edit()' class='order-number'>" + id + "</p>";
+  row.appendChild(cell);
   for (let key in row_info) {
     cell = document.createElement("td");
     cell.innerHTML = row_info[key];
@@ -226,7 +242,7 @@ async function save() {
     data:data[type][id]
   }
   console.log("data type:", send);
-  await axios.post(request, send, () => {
+  await axios.post(request, send, (err) => {
     if (err) {
       console.log(err);
     } else {
