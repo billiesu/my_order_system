@@ -3,11 +3,16 @@
 // 引入expres框架
 let express = require("express");
 let app = express();
+const cors = require("cors");
+
 app.use(express.json());     
 app.use(express.urlencoded());
+app.use(express.static("./frontend/public"));
+app.use(cors());
 
 let bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
+
 
 let port = 5000;
 
@@ -16,7 +21,7 @@ const mongoose = require('mongoose');
 // need to be set for use findOneAndUpdate function
 mongoose.set('useFindAndModify', false);
 // 数据库绑定
-let url = 'mongodb://localhost:27017/orderManageSystem';
+let url = 'mongodb://localhost:27017/orderManage';
 mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("Connected to Database");
   }).catch((err) => {
@@ -24,33 +29,33 @@ mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreat
   });
 // 定义order模型
 const orderSchema = new mongoose.Schema({ 
-  Id: {type: Number, unique:true},
-  orderTime: {type: Date, default:Date.now},   //不需要设定
-  orderStatus: Boolean,
-  payType: Number,
-  customerName: String,
-  totalPrice: Number,
-  remark: String
+  Id: {type: String, unique:true},
+  orderTime: {type:String},   //不需要设定
+  orderStatus: {type:String},
+  payType: {type:String},
+  customerName: {type:String},
+  totalPrice: {type:String},
+  remark: {type:String}
 });
 //定义client模型
 const clientSchema = new mongoose.Schema({
-  Id: {type: Number, unique: true},
-  customerName: String,
-  address: String,
-  status: Boolean,
-  phoneNumber: Number,
-  remark: String,
-  country: String
+  Id: {type: String, unique:true},
+  customerName: {type:String},
+  address: {type:String},
+  status: {type:String},
+  phoneNumber: {type:String},
+  remark: {type:String},
+  country: {type:String}
 })
 
 //定义product模型
 const productSchema = new mongoose.Schema({
-  Id: {type: Number, unique: true},
-  productName: String,
-  price: Number,
-  quantity: Number,
-  type: {type:String, enum:["daily_necessities", "make_up"]},
-  remark: String
+  Id: {type: String, unique:true},
+  productName: {type:String},
+  price: {type:String},
+  quantity:{type:String},
+  type: {type:String},
+  remark: {type:String}
 })
 // 以固定模式作为Order数据库的模版
 const Order = mongoose.model('Order', orderSchema);
@@ -60,36 +65,37 @@ const Product = mongoose.model("Product", productSchema);
 async function dbAndMsg (query, body) {
   let db;
   let msg;
-  if(query.type == "order") {
+  if(query.type == "orders") {
     db = Order;
     msg = {
-      Id : body.Id,
-      orderStatus: body.orderStatus,
-      payType: body.payType,
-      customerName: body.customerName,
-      totalPrice: body.totalPrice,
-      remark: body.remark
+      Id : query.id,
+      orderTime: body.data.OrderDate,
+      orderStatus: body.data.OrderDate,
+      payType: body.data.PayType,
+      customerName: body.data.Client,
+      totalPrice: body.data.Totalprice,
+      remark: body.data.Remark
     } 
-  }else if (query.type == "client") {
+  }else if (query.type == "clients") {
     db = Client;
     msg = {
-      Id: body.Id,
-      customerName: body.customerName,
-      address: body.address,
-      status: body.status,
-      phoneNumber: body.phoneNumber,
-      remark: body.remark,
-      country: body.country
+      Id: query.id,
+      customerName: body.data.Name,
+      address: body.data.Address,
+      status: body.data.Status,
+      phoneNumber: body.data.Phone,
+      remark: body.data.Remark,
+      country: body.data.Country
     }
-  }else if (query.type == "product") {
+  }else if (query.type == "products") {
     db = Product,
     msg = {
-      Id: body.Id,
-      productName: body.productName,
-      price: body.price,
-      quantity: body.quantity,
-      type: body.type,
-      remark: body.remark     
+      Id: query.id,
+      productName: body.data.Name,
+      price: body.data.Price,
+      quantity: body.data.Quantities,
+      type: body.data.Type,
+      remark: body.data.Remark     
     }
   }
   let dbMsg = {
@@ -100,28 +106,34 @@ async function dbAndMsg (query, body) {
 }
 
 
-// login,发送主页
-app.post('/login', (req, res) => {
-  console.log(req.query);
-  res.redirect('/home');  //跳转到home界面
+app.get("/", function (req, res) {
+  console.log("req.query");
+  res.sendFile(__dirname + "/frontend/public/index.html");
+});
+
+app.route("/Login").get((req, res) =>{
+  res.sendFile(__dirname + "/frontend/public/order_summary.html");
+
 });
 
 // load 登陆后发送所有的订单和用户信息
-app.post('/load', async function (req, res) {
+app.get('/load',  async function (req, res){
   let allMsg = {
     orders: await Order.find(),
     clients: await Client.find(),
     products: await Product.find()
   }
+  console.log("req.query",allMsg);
   let content = JSON.stringify(allMsg);
   res.send(content);
 })
 
 // 增加 new order || new client || new product
-app.post('/create', jsonParser, async function (req, res) {
+app.post('/add', jsonParser, async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
+  console.log("body contains:", req.body);
   let dbMsg = await dbAndMsg(req.query, req.body);
-  
+  console.log(req.query);
   let insertSign = await insertFunction(dbMsg.dbName, dbMsg.msgContend).catch(error => console.log(error.stack));
   console.log("sign:", insertSign);
   if (insertSign) 
@@ -148,14 +160,14 @@ app.post('/update', jsonParser, async function (req, res) {
 })
 
 //delete order || client || product
-app.post('/delete', jsonParser, async function (req, res) {
+app.get('/delete', async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
   let db;
-  if (req.query.type == "order") db = Order;
-  else if (req.query.type == "client") db = Client;
-  else if (req.query.type == "product") db = Product;
-  let msg = {Id:req.query.Id}
-  console.log("Id:", req.query.Id);
+  if (req.query.type == "orders") db = Order;
+  else if (req.query.type == "clients") db = Client;
+  else if (req.query.type == "products") db = Product;
+  let msg = {Id:req.query.id}
+  console.log("Id:", req.query.id);
   let searchRes = await findFunction(db, msg);
   if (!searchRes.res) {
     res.send("Couldn't find this order!!")

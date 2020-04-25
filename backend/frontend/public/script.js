@@ -187,7 +187,7 @@ async function save() {
   ) {
     id = randomNumber();
     data[type][id] = {};
-    request = urlPrefix + 'add?type=' + type + '&id=' + id;
+    request = urlPrefix + '/add?type=' + type + '&id=' + id;
     document
       .getElementsByClassName("pop-out")[0]
       .classList.toggle("adding", false);
@@ -195,6 +195,9 @@ async function save() {
     id = currID;
     resquest = urlPrefix + `/edit?type=` + type + '&id=' + id;
   }
+  //打印
+  console.log(request);
+
   //Get all the input value.
   parent.querySelectorAll("li").forEach((element) => {
     data[type][id][element.querySelector("p").innerHTML] = element.querySelector(
@@ -218,15 +221,20 @@ async function save() {
       element.innerHTML = arr[i++];
     });
   }
-  //Sent the data to the backend
-  // await axios.post(request, data[type], () => {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     notation.innerHTML = "";
-  //     document.body.style.cursor = "none";
-  //   }
-  // });
+  // Sent the data to the backend
+  let send = {
+    data:data[type][id]
+  }
+  console.log("data type:", send);
+  await axios.post(request, send, () => {
+    if (err) {
+      console.log(err);
+    } else {
+      notation.innerHTML = "";
+      document.body.style.cursor = "none";
+      console.log("data type:", data[type]);
+    }
+  });
   //Hide the edit pages
   document.getElementsByClassName("pop-out")[0].style.display = "none";
   event.target.parentElement.parentElement.style.display = "none";
@@ -272,6 +280,8 @@ function del() {
     let parent = event.target.parentElement.parentElement;
     let type = parent.id.substring(4);
     let request = urlPrefix + '/delete?type=' + type + '&id=' + currID;
+    //打印
+    console.log(request);
     axios.get(request, (err) => {
       if (err) {
         console.log(err);
