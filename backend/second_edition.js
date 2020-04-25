@@ -210,7 +210,6 @@ async function insertFunction (db, msg) {
 
 // update the original msg (availablefor all db type)
 async function updateFunction (db, id, newMsg) {
-  // 跟新order内容
     db.findByIdAndUpdate(
       {_id: id}, 
       newMsg,
