@@ -203,7 +203,9 @@ app.post('/email', jsonParser, function (req, res) {
   // msg content send to client
   let msgSendToClient = `<pre>`;
   msgSendToClient += date + "\n";
-  msgSendToClient += "Dear " + clientName + ", we have receive your recommendation. We will reply you as soom as possible.";
+  msgSendToClient += "Dear " + clientName + ", we have receive your recommendation. " + "\n";
+  msgSendToClient += "Your recommendation is:" +clientMsg + "\n";
+  msgSendToClient += "We will reply you as soom as possible.";
   msgSendToClient += `</pre>`;
 
   // msg content send to manager
