@@ -4,6 +4,11 @@
 let express = require("express");
 let app = express();
 const cors = require("cors");
+const moment = require("moment");
+
+// add email module
+const nodemailer = require("nodemailer");
+
 
 app.use(express.json());     
 app.use(express.urlencoded());
@@ -13,7 +18,11 @@ app.use(cors());
 let bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
 
+// set inform email address & passward 
+let pw = "using_for_project_only";
+let spec = `smtps://ee599projecttest@gmail.com:${pw}@smtp.gmail.com`;
 
+//set port number
 let port = 5000;
 
 //import database Model
@@ -182,6 +191,68 @@ app.get('/delete', async function (req, res) {
   }
   
 })
+
+app.post('/email', jsonParser, function (req, res) {
+  if ((req.body === undefined)) return res.sendStatus(400);
+  let clientEmail = req.body.email;
+  let clientMsg = req.body.msg;
+  let clientName = req.body.name;
+  let systemEmail = "ee599projecttest@gmail.com";
+  let managerEmail = "Billie_su@163.com";
+  let date = moment().format("MMMM Do YYYY, h:mm:ss a");
+  // msg content send to client
+  let msgSendToClient = `<pre>`;
+  msgSendToClient += date + "\n";
+  msgSendToClient += "Dear " + clientName + ", we have receive your recommendation. We will reply you as soom as possible.";
+  msgSendToClient += `</pre>`;
+
+  // msg content send to manager
+  let msgSendToManager = `<pre>`;
+  msgSendToManager += date + "\n";
+  msgSendToManager += "Dear manager, you get msg from client. Here is msg:" + "\n";
+  msgSendToManager += clientMsg;
+  msgSendToManager += `</pre>`;
+
+  let mailOptions1 = {
+    from: '"NodeJS" <ee599projecttest@gmail.com>', // sender address
+    to: clientEmail, // list of receivers
+    subject: "Reply for your recommendation about our Order Manage System", // Subject line
+    text: "", // plaintext body
+    html: msgSendToClient
+  };
+  SendMail(mailOptions1);
+  let mailOptions2 = {
+    from: '"NodeJS" <ee599projecttest@gmail.com>', // sender address
+    to: managerEmail, // list of receivers
+    subject: "New recommendation about Order Manage System", // Subject line
+    text: "", // plaintext body
+    html: msgSendToManager
+  };
+  SendMail(mailOptions2);
+  console.log("Have send msg to client and manager!");
+  res.send("Have send msg to client and manager!");
+}) 
+
+
+// send mail function 
+function SendMail(mailOptions) {
+  var transporter = nodemailer.createTransport(spec);
+  return transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log("Error in sending email: ", error);
+      try {
+        if (/quota/.test(error)) {
+          console.log("We failed because of email quota!");
+        }
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+      return console.log(error);
+    }
+    console.log("Message sent: " + info.response);
+  });
+}
+
 
 //delete function(availablefor all db type)
 async function deleteFunction (db, _id) { 
