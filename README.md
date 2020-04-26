@@ -1,46 +1,27 @@
-# nodejs_fullstack
+# Order Management System
+## We depoy this web in the AliCLoud, you can visited with url: http://tntrpg.com:5000
 
-A full stack project starter code for NodeJS.
+## This is a full-stack project (including front-end in `html/css/javascript/Bootstrap` and back-end in `nodejs/MongoDB`). We will create A web that allows retailers to manage all orders. Each time when retailers input the message, the database will keep these massages.
+
 
 <img alt="Diagram" src="https://github.com/ourarash/nodejs_fullstack/blob/master/diagram.png?raw=true" width="400" text-align="center">
 
-- The frontend is a simple web page that takes to numbers: `min_value` and `max_value` and sends it to the backend using HTTP GET request.
-- The backend is a simple NodeJS server that processes the HTTP GET request, reads the parameters `min_value` and `max_value` and generates a random value between these two numbers and returns the result back to the frontend.
+<img alt="Diagram" src = "main_page.png" width="400" text-align="center">
+
+###  - The frontend is set to send the `creat/edit/delete`  `order/client/product` massage for allowing retailers to manage all business massage. These modification can be sent to the backend using HTTP GET/POST request. 
+
+<img alt="Diagram" src = "create_window.png" width="400" text-align="center">
+
+### - This is the create new order window for tailer to `input new order`(similar with client/product) massage.
+
+<img alt="Diagram" src = "modify_window.png" width="400" text-align="center">
+
+### - This is the Modify order window for tailer to `modify existed order`(similar with client/product) massage.
+
+### - The backend is a simple NodeJS server that processes the HTTP `GET/POST` request, return all former kept massage to frontend in the begining. Atfer it receive the massage created by `input` from frontend, it will keep these changes into `MangoDB database` and returns the result back to the frontend.
 
 
-By default frontend listens on port 3000, and backend listens on port 5000.
 
-# Install NodeJS
-
-You can install NodeJs from [here](https://nodejs.org/en/download/).
-
-# Running this package
-
-To download and install:
-
-```bash
-git clone https://github.com/ourarash/nodejs_fullstack.git
-cd nodejs_fullstack
-npm install
-```
-
-## Running Backend:
-```bash
-cd backend
-node app.js
-```
-
-You can test backend by installing and running [Postman](https://www.postman.com/downloads/):
-
-<img alt="Backend" src="https://github.com/ourarash/nodejs_fullstack/blob/master/backend/screenshot.png?raw=true" width="400">
-
-
-## Running Frontend:
-```bash
-cd frontend
-node app.js
-```
-
-Then open your browser to http://localhost:3000:
-
-<img alt="Frontend" src="https://github.com/ourarash/nodejs_fullstack/blob/master/frontend/screenshot.png?raw=true" width="400">
+## we still need to do:
+### - make connection with the these three collections (client/order/product)
+### - 

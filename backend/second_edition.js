@@ -1,9 +1,14 @@
 "use strict";
 
-// 引入expres框架
+// import express frame
 let express = require("express");
 let app = express();
 const cors = require("cors");
+const moment = require("moment");
+
+// add email module
+const nodemailer = require("nodemailer");
+
 
 app.use(express.json());     
 app.use(express.urlencoded());
@@ -13,21 +18,25 @@ app.use(cors());
 let bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
 
+// set inform email address & passward 
+let pw = "using_for_project_only";
+let spec = `smtps://ee599projecttest@gmail.com:${pw}@smtp.gmail.com`;
 
+//set port number
 let port = 5000;
 
-//引入数据库模块
+//import database Model
 const mongoose = require('mongoose');
 // need to be set for use findOneAndUpdate function
 mongoose.set('useFindAndModify', false);
-// 数据库绑定
+// connect database
 let url = 'mongodb://localhost:27017/orderManage';
 mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("Connected to Database");
   }).catch((err) => {
       console.log("Not Connected to Database ERROR! ", err);
   });
-// 定义order模型
+// define order Model
 const orderSchema = new mongoose.Schema({ 
   Id: {type: String, unique:true},
   OrderDate: {type:String},   //不需要设定
@@ -37,7 +46,7 @@ const orderSchema = new mongoose.Schema({
   Status: {type:String},
   Remark: {type:String}
 });
-//定义client模型
+//define client Model
 const clientSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
   Name: {type:String},
@@ -48,7 +57,7 @@ const clientSchema = new mongoose.Schema({
   Remark: {type:String}
 })
 
-//定义product模型
+// define product model
 const productSchema = new mongoose.Schema({
   Id: {type: String, unique:true},
   Name: {type:String},
@@ -57,11 +66,12 @@ const productSchema = new mongoose.Schema({
   Price: {type:String},
   Remark: {type:String}
 })
-// 以固定模式作为Order数据库的模版
+// create collection entrance for the specific Model
 const Order = mongoose.model('Order', orderSchema);
 const Client = mongoose.model('Client', clientSchema);
 const Product = mongoose.model("Product", productSchema);
 
+// define db'type & db's msg with req.query & req.body
 async function dbAndMsg (query, body) {
   let db;
   let msg;
@@ -105,18 +115,19 @@ async function dbAndMsg (query, body) {
   return dbMsg;
 }
 
-
+// main page
 app.get("/", function (req, res) {
   console.log("req.query");
   res.sendFile(__dirname + "/frontend/public/index.html");
 });
 
+// loading page
 app.route("/Login").get((req, res) =>{
   res.sendFile(__dirname + "/frontend/public/order_summary.html");
 
 });
 
-// load 登陆后发送所有的订单和用户信息
+// after loading, send all client/order/product msg back 
 app.get('/load',  async function (req, res){
   let allMsg = {
     orders: await Order.find(),
@@ -129,7 +140,7 @@ app.get('/load',  async function (req, res){
   res.send(content);
 })
 
-// 增加 new order || new client || new product
+// add new order/lient/roduct
 app.post('/add', jsonParser, async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
   console.log("body contains:", req.body);
@@ -147,7 +158,7 @@ app.listen(port, err => {
   console.log(`Listening on port: ${port}`);
 });
 
-// update Order || client ||  product 
+// update order/lient/roduct
 app.post('/edit', jsonParser, async function (req, res) {
   console.log("req.body",req.body,"req.query",req.query);
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
@@ -162,7 +173,7 @@ app.post('/edit', jsonParser, async function (req, res) {
   }
 })
 
-//delete order || client || product
+//delete order/lient/roduct
 app.get('/delete', async function (req, res) {
   if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
   let db;
@@ -181,7 +192,69 @@ app.get('/delete', async function (req, res) {
   
 })
 
-//delete function
+app.post('/email', jsonParser, function (req, res) {
+  if ((req.body === undefined)) return res.sendStatus(400);
+  let clientEmail = req.body.email;
+  let clientMsg = req.body.msg;
+  let clientName = req.body.name;
+  let systemEmail = "ee599projecttest@gmail.com";
+  let managerEmail = "Billie_su@163.com";
+  let date = moment().format("MMMM Do YYYY, h:mm:ss a");
+  // msg content send to client
+  let msgSendToClient = `<pre>`;
+  msgSendToClient += date + "\n";
+  msgSendToClient += "Dear " + clientName + ", we have receive your recommendation. We will reply you as soom as possible.";
+  msgSendToClient += `</pre>`;
+
+  // msg content send to manager
+  let msgSendToManager = `<pre>`;
+  msgSendToManager += date + "\n";
+  msgSendToManager += "Dear manager, you get msg from client. Here is msg:" + "\n";
+  msgSendToManager += clientMsg;
+  msgSendToManager += `</pre>`;
+
+  let mailOptions1 = {
+    from: '"NodeJS" <ee599projecttest@gmail.com>', // sender address
+    to: clientEmail, // list of receivers
+    subject: "Reply for your recommendation about our Order Manage System", // Subject line
+    text: "", // plaintext body
+    html: msgSendToClient
+  };
+  SendMail(mailOptions1);
+  let mailOptions2 = {
+    from: '"NodeJS" <ee599projecttest@gmail.com>', // sender address
+    to: managerEmail, // list of receivers
+    subject: "New recommendation about Order Manage System", // Subject line
+    text: "", // plaintext body
+    html: msgSendToManager
+  };
+  SendMail(mailOptions2);
+  console.log("Have send msg to client and manager!");
+  res.send("Have send msg to client and manager!");
+}) 
+
+
+// send mail function 
+function SendMail(mailOptions) {
+  var transporter = nodemailer.createTransport(spec);
+  return transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log("Error in sending email: ", error);
+      try {
+        if (/quota/.test(error)) {
+          console.log("We failed because of email quota!");
+        }
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+      return console.log(error);
+    }
+    console.log("Message sent: " + info.response);
+  });
+}
+
+
+//delete function(availablefor all db type)
 async function deleteFunction (db, _id) { 
   db.findByIdAndDelete(_id, function(err) {
     if (err) {
@@ -192,7 +265,7 @@ async function deleteFunction (db, _id) {
   })
 }
 
-// sync function
+// insert function (availablefor all db type)
 async function insertFunction (db, msg) {
   // const res = await Order.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
   let sign = await findFunction(db, msg);
@@ -206,9 +279,8 @@ async function insertFunction (db, msg) {
   }
 }
 
-// update the original msg 
+// update the original msg (availablefor all db type)
 async function updateFunction (db, id, newMsg) {
-  // 跟新order内容
     db.findByIdAndUpdate(
       {_id: id}, 
       newMsg,
@@ -226,7 +298,7 @@ async function updateFunction (db, id, newMsg) {
 }
 
 
-// using ID search order
+// using Id (not _id) search msg(return one msg cz only Id is unique)
 async function findFunction (db, msg) {
   const res = await db.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
   if (res[0] != null) {
