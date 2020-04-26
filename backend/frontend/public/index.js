@@ -27,26 +27,36 @@
 //     document.body.style.cursor = "default";
 // }
 
+document.getElementById("emailSend").onclick = function () {
+  console.log("entry!!!");
+  email();
+};
+
 async function email() {
   // Set the mouse cursor to hourglass
     document.body.style.cursor = "wait";
     try {
-        // Get the login infos from the user
-        let name= document.getElementById("name").value;
-        let email = document.getElementById("email").value;
-        let msg = document.getElementById("message").value;
-        let data = {
-          name:name,
-          email:email,
-          msg:msg
-        }
-  
-        // Address of my backend
-        let request = `http://www.tntrpg.com:5000/email`;
-  
-        // Send an HTTP GET request to the backend
-        // let login_info = {"username" : username, "password" : password};
-        await axios.post(request, data);
+      if (confirm("Send Recomendation?")) {
+       // Get the login infos from the user
+       let name= document.getElementById("name").value;
+       let email = document.getElementById("email").value;
+       let msg = document.getElementById("message").value;
+       let data = {
+         name:name,
+         email:email,
+         msg:msg
+       }
+ 
+       // Address of my backend
+      //  let request = "http://localhost:5000/email";
+       let request = "http://www.tntrpg.com:5000/email";
+ 
+       // Send an HTTP GET request to the backend
+       // let login_info = {"username" : username, "password" : password};
+       console.log("error: ", request, data);
+       await axios.post(request, data);
+      }
+ 
     } catch (error) {
       console.log("error: ", error);
     }

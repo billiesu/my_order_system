@@ -4,6 +4,8 @@
 		<title>Order System</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<link rel="stylesheet" href="main.css" />
 	</head>
 	<body class="is-preload">
@@ -99,7 +101,8 @@
 							<div class="col-12"><textarea name="message" id="message" placeholder="Message" rows="4"></textarea></div>
 							<div class="col-12">
 								<ul class="actions special">
-									<li><input type="submit" value="Send Message" class="primary" onclick="email()"/></li>
+									<!-- <input type="submit" value="Send Message" class="primary" onclick="email()"/> -->
+									<li><input type="reset" id="emailSend" value="Send Message" class="primary" onclick="email()"/></li>
 								</ul>
 							</div>
 						</div>

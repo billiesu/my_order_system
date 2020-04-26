@@ -52,7 +52,7 @@ html {
 html {
   background-color: #313a3d;
   background-attachment: fixed, fixed;
-  background-image: url("../../frontend/public/images/bg.jpg");
+  background-image: url("../images/bg.jpg");
   background-position: top left, center center;
   background-repeat: repeat, none;
   background-size: auto, cover;
@@ -591,6 +591,14 @@ input[type="submit"]:active,
 }
 
 input[type="submit"].primary,
+.button.primary {
+  background-color: #8cd1a8;
+  border: 0;
+  box-shadow: none;
+  color: #ffffff !important;
+}
+
+input[type="reset"].primary,
 .button.primary {
   background-color: #8cd1a8;
   border: 0;
