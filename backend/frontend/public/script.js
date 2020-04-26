@@ -248,7 +248,11 @@ async function save() {
     let i = 0;
     console.log(data[type][id]);
     currElement.parentElement.parentElement.querySelectorAll('td').forEach((element) => {
-      element.innerHTML = arr[i++];
+      if (i === 0) {
+        element.innerHTML = "<p onclick='edit()' class='order-number'>" + arr[i++] + "</p>";
+      }else {
+        element.innerHTML = arr[i++];
+      }
     });
   }
   // Sent the data to the backend
