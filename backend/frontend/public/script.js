@@ -7,6 +7,7 @@ let data = {};
 let currID;
 let currElement;
 // let info;
+//  let urlPrefix = "http://localhost:5000/email";
 const urlPrefix = 'http://www.tntrpg.com:5000';
 
 //Load the infos from the backend.
