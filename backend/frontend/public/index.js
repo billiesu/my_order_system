@@ -54,4 +54,3 @@ async function email() {
     // Set the cursor back to default
     document.body.style.cursor = "default";
 }
-  
