@@ -27,6 +27,8 @@
 
 
 
+#### - Also, you can sort the table by clicking the table head of any column.
+
 #### - The backend is a simple NodeJS server that processes the HTTP `GET/POST` request, return all former kept massage to frontend in the begining. Atfer it receive the massage created by `input` from frontend, it will keep these changes into `MangoDB database` and returns the result back to the frontend.
 
 
