@@ -6,7 +6,6 @@
 let data = {};
 let currID;
 let currElement;
-// let info;
 //  let urlPrefix = "http://localhost:5000/email";
 const urlPrefix = 'http://www.tntrpg.com:5000';
 
@@ -45,78 +44,22 @@ onload = async function () {
 };
 
 /**
+ * Generate three tables
  * @param {String} tableID The ID of the table we want to generate.
  * @param {String} dataName The key name of the data table sent from the backend.
  */
 function generateTable(tableID, type) {
   let tbody = document.getElementById(tableID);
-  // let info = {
-  //   "001":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "002" : {
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "003":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "004":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "005":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "006":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  //   "007":{
-  //     "Order Date": "张珊",
-  //     Client: "学生",
-  //     "Total price": "Web Developer",
-  //     Status: "Web Developer",
-  //     "Pay Type": "Web Developer",
-  //     Remark: "Web Developer",
-  //   },
-  // };
   let info = data[type];
   for (let key in info) {
     let tr = generateRow(key, info[key]);
     tbody.appendChild(tr);
   }
 }
+//Generate each row
 function generateRow(id, row_info) {
   let row = document.createElement("tr");
-  //If it is a order number, make it clickable
+  //If it is an order number, make it clickable
   let cell = document.createElement("td");
   cell.innerHTML =
         "<p onclick='edit()' class='order-number'>" + id + "</p>";
@@ -174,6 +117,7 @@ function add() {
     .forEach((element) => {
       element.querySelector("input").value = "";
     });
+  //adding "adding" class to pop-out page to indicate it is opened by add buttion
   document
     .getElementsByClassName("pop-out")[0]
     .classList.toggle("adding", true);
@@ -194,7 +138,7 @@ document.getElementsByClassName("save").onclick = function () {
   save();
 };
 async function save() {
-  let parent = event.target.parentElement.parentElement;
+  let parent = event.target.parentElement.parentElement;// find the corrent pop-out page
   console.log("parent:", parent)
   let type = parent.id.substring(4);
   if (data[type] === undefined) {
@@ -207,15 +151,18 @@ async function save() {
   let notationID = parent.id.substring(4, parent.id.length - 1) + "-notation";
   let notation = document.getElementById(notationID);
   notation.innerHTML = "Saving...";
-  //Generate a random orderID
+
   let id;
   // data[type] = info;
   if (
+    //check whether the current pop-out page is opened by add button or edit button
     document.getElementsByClassName("pop-out")[0].classList.contains("adding")
   ) {
+    //Generate a random orderID
     id = randomNumber();
     data[type][id] = {};
     request = urlPrefix + '/add?type=' + type + '&id=' + id;
+    //remove "adding" class
     document
       .getElementsByClassName("pop-out")[0]
       .classList.toggle("adding", false);
@@ -224,10 +171,8 @@ async function save() {
     request = urlPrefix + `/edit?type=` + type + '&id=' + id;
     console.log("request:", request);
   }
-  //打印
-  console.log(request);
 
-  //Get all the input value.
+  //Get all the input values of input boxes.
   parent.querySelectorAll("li").forEach((element) => {
     data[type][id][element.querySelector("p").innerHTML] = element.querySelector(
       "input"
@@ -248,7 +193,7 @@ async function save() {
     let i = 0;
     console.log(data[type][id]);
     currElement.parentElement.parentElement.querySelectorAll('td').forEach((element) => {
-      if (i === 0) {
+      if (i === 0) { //If it is an order number, make it clickable
         element.innerHTML = "<p onclick='edit()' class='order-number'>" + arr[i++] + "</p>";
       }else {
         element.innerHTML = arr[i++];
@@ -276,6 +221,7 @@ async function save() {
   
 }
 //generate a random order ID
+//format: current time + 6 random numbers
 function randomNumber() {
   
   const now = new Date();
@@ -317,8 +263,8 @@ function del() {
     console.log("parent:", parent)
     let type = parent.id.substring(4);
     let request = urlPrefix + '/delete?type=' + type + '&id=' + currID;
-    //打印
-    console.log(request);
+    
+    //make a delete request to backend
     axios.get(request, (err) => {
       if (err) {
         console.log(err);
@@ -344,6 +290,7 @@ function cancel() {
 document.getElementsByClassName("cancel").onclick = function () {
   openPage();
 };
+//only the the navigation bar we click can has the class "active" and is visible
 function openPage() {
   let activeElement = document.getElementsByClassName("active")[0];
   if (activeElement === event.target) {

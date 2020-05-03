@@ -52,8 +52,6 @@ async function email() {
        let request = "http://www.tntrpg.com:5000/email";
  
        // Send an HTTP GET request to the backend
-       // let login_info = {"username" : username, "password" : password};
-       console.log("error: ", request, data);
        await axios.post(request, data);
       }
  
