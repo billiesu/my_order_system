@@ -3,6 +3,10 @@
 
 #### We depoy this projects in the AliCLoud, you can visit [Order Management System](http://tntrpg.com:5000). This is a full-stack project (including front-end in `html/css/javascript/Bootstrap` and back-end in `nodejs/MongoDB`). We create A web that allows retailers to manage all orders/products/clients. Each time when retailers input the message, the database will keep these massages.
 
+#### You also can watch [this video](https://www.youtube.com/watch?v=KWPD5X_TJEg).
+
+#### If you want to play our system, please use the second_edition.js as the backend code.(First_edition is the old version, and the third_edition contains some new features and is not finished yet.)
+
 
 <img alt="Diagram" src="https://github.com/ourarash/nodejs_fullstack/blob/master/diagram.png?raw=true" width="400" text-align="center">
 
