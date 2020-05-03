@@ -6,6 +6,10 @@
 
 <img alt="Diagram" src="https://github.com/ourarash/nodejs_fullstack/blob/master/diagram.png?raw=true" width="400" text-align="center">
 
+<img alt="Diagram" src = "layout.png" width="400" text-align="center">
+
+### -This is our frontend and backend layout.
+
 <img alt="Diagram" src = "main_page.png" width="400" text-align="center">
 
 ###  - The frontend is set to send the `creat/edit/delete`  `order/client/product` massage for allowing retailers to manage all business massage. These modification can be sent to the backend using HTTP GET/POST request. 
@@ -23,5 +27,5 @@
 
 
 ## we still need to do:
-### - make connection with the these three collections (client/order/product)
-### - 
+### - connect with the these three collections (client/order/product), when the product add/subtract in specific order, the total remaining product number will also substract/add in product page
+### - add password function for user
