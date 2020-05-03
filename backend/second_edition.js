@@ -39,7 +39,7 @@ mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreat
 // define order Model
 const orderSchema = new mongoose.Schema({ 
   Id: {type: String, unique:true},
-  OrderDate: {type:String},   //不需要设定
+  OrderDate: {type:String},  
   Client: {type:String},
   Totalprice: {type:String},
   PayType: {type:String},
