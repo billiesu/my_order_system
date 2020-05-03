@@ -23,14 +23,14 @@ let pw = "using_for_project_only";
 let spec = `smtps://ee599projecttest@gmail.com:${pw}@smtp.gmail.com`;
 
 //set port number
-let port = 5000;
+let port = 5001;
 
 //import database Model
 const mongoose = require('mongoose');
 // need to be set for use findOneAndUpdate function
 mongoose.set('useFindAndModify', false);
 // connect database
-let url = 'mongodb://localhost:27017/orderManage';
+let url = 'mongodb://localhost:27017/orderManageThirdEdition';
 mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("Connected to Database");
   }).catch((err) => {
@@ -39,12 +39,13 @@ mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreat
 // define order Model
 const orderSchema = new mongoose.Schema({ 
   Id: {type: String, unique:true},
-  OrderDate: {type:String},   //不需要设定
+  OrderDate: {type:String},   
   Client: {type:String},
   Totalprice: {type:String},
   PayType: {type:String},
   Status: {type:String},
-  Remark: {type:String}
+  Remark: {type:String},
+  Products:[]
 });
 //define client Model
 const clientSchema = new mongoose.Schema({
@@ -75,6 +76,7 @@ const Product = mongoose.model("Product", productSchema);
 async function dbAndMsg (query, body) {
   let db;
   let msg;
+  console.log("body:",body);
   if(query.type == "orders") {
     db = Order;
     msg = {
@@ -84,7 +86,8 @@ async function dbAndMsg (query, body) {
       Totalprice: body.data.Totalprice,
       PayType: body.data.PayType,
       Status: body.data.Status,
-      Remark: body.data.Remark
+      Remark: body.data.Remark,
+      Products: body.data.products
     } 
   }else if (query.type == "clients") {
     db = Client;
@@ -138,6 +141,16 @@ app.get('/load',  async function (req, res){
   let content = JSON.stringify(allMsg);
   res.send(content);
 })
+
+
+///postman
+app.all('/test', async function (req, res) {
+  if ((req.body == undefined || req.query == undefined)) return res.sendStatus(400);
+  // let content = await JSON.parse(req.body);
+  console.log("body contains:", req.body.data);
+  let dbMsg = await dbAndMsg(req.query, req.body);
+  // console.log("msg contains:", dbMsg.msg);
+});
 
 // add new order/lient/product
 app.post('/add', jsonParser, async function (req, res) {
