@@ -1,3 +1,22 @@
+const mongoose = require('mongoose');
+  let url = 'mongodb://localhost:27017/orderManage';
+   mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
+    console.log("Connected to Database");
+    }).catch((err) => {
+        console.log("Not Connected to Database ERROR! ", err);
+    });
+
+  // define order Model
+  const orderSchema = new mongoose.Schema({ 
+    Id: {type: String, unique:true},
+    OrderDate: {type:String},   //不需要设定
+    Client: {type:String},
+    Totalprice: {type:String},
+    PayType: {type:String},
+    Status: {type:String},
+    Remark: {type:String}
+  });
+  const Order = mongoose.model('Order', orderSchema);
 
 //delete function(availablefor all db type)
 async function deleteFunction (db, _id) { 
@@ -16,7 +35,7 @@ async function insertFunction (db, msg) {
   // const res = await Order.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
   let sign = await findFunction(db, msg);
   if (!sign.res) {
-    await db.create(msg).catch(error => console.log(error.stack));
+    await Order.create(msg).catch(error => console.log(error.stack));
     console.log("Sucess Insert msg");
     return true;
   } else {
@@ -46,26 +65,6 @@ async function updateFunction (db, id, newMsg) {
 
 // using Id (not _id) search msg(return one msg cz only Id is unique)
 async function findFunction (db, msg) {
-
-  const mongoose = require('mongoose');
-  let url = 'mongodb://localhost:27017/orderManage';
-  await mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }).then(() => {
-    console.log("Connected to Database");
-    }).catch((err) => {
-        console.log("Not Connected to Database ERROR! ", err);
-    });
-
-  // define order Model
-  const orderSchema = new mongoose.Schema({ 
-    Id: {type: String, unique:true},
-    OrderDate: {type:String},   //不需要设定
-    Client: {type:String},
-    Totalprice: {type:String},
-    PayType: {type:String},
-    Status: {type:String},
-    Remark: {type:String}
-  });
-  const Order = mongoose.model('Order', orderSchema);
 
   
   const res = await Order.find({Id:msg.Id}, null, { sort: { name: 1 }, limit: 1 });
