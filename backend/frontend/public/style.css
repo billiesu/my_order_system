@@ -6,7 +6,7 @@
 }
 
 body {
-	background-image: url('../../frontend/public/images/pic01.jpg');
+	background-image: url('../images/pic01.jpg');
 	/* color: #FFFFFF; */
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
